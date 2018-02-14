@@ -1,0 +1,49 @@
+{
+  "name": "warhead-generator",
+  "version": "0.0.0-alpha.0",
+  "description": "A yeoman generator for warhead",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "publish": "git push origin --tags && git push origin",
+    "release:pre": "npm version prerelease && npm publish --tag pre",
+    "release:patch": "npm version patch && npm publish",
+    "release:minor": "npm version minor && npm publish",
+    "release:major": "npm version major && npm publish",
+    "mocha": "mocha test/generators.test.js --timeout 300000 --exit",
+    "test": "standard --fix && npm run mocha",
+    "linter": "standard --fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/imaustink/warhead-generator.git"
+  },
+  "keywords": [
+    "warhead",
+    "FaaS",
+    "hosted",
+    "functions",
+    "microservices",
+    "generator"
+  ],
+  "author": "Austin Kurpuis",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/imaustink/warhead-generator/issues"
+  },
+  "homepage": "https://github.com/imaustink/warhead-generator#readme",
+  "devDependencies": {
+    "mocha": "^5.0.0",
+    "standard": "^10.0.3",
+    "yeoman-assert": "^3.1.0",
+    "yeoman-test": "^1.7.0"
+  },
+  "dependencies": {
+    "enpeem": "^2.2.0",
+    "lodash": "^4.17.5",
+    "mkdirp": "^0.5.1",
+    "yeoman-generator": "^2.0.2"
+  }
+}

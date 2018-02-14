@@ -1,0 +1,39 @@
+{
+  "name": "<%= name %>",
+  "version": "0.0.0",
+  "description": "<%= description %>",
+  "scripts": {
+    "ava": "nyc ava **/*.test.js",
+    "cover:html": "nyc report --reporter=html",
+    "cover:text": "nyc report --reporter=text-lcov",
+    "test:watch": "nyc ava **/*.test.js --watch",
+    "test": "standard --fix && npm run ava",
+    "linter": "standard --fix",
+    "ci": "npm run test && npm run cover:text | coveralls"
+  },
+  "warhead": {
+    "platform": "<%= platform %>"
+  },
+  "ava": {
+    "require": [
+      "babel-core/register"
+    ]
+  },
+  "babel": {
+    "presets": [
+      "es2015"
+    ],
+    "plugins": [
+      "transform-runtime"
+    ],
+    "ignore": "**/*.test.js",
+    "env": {
+      "development": {
+        "sourceMaps": "inline"
+      }
+    }
+  },
+  "license": "MIT",
+  "devDependencies": {},
+  "dependencies": {}
+}
