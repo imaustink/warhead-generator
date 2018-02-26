@@ -1,6 +1,6 @@
 {
   "name": "warhead-generator",
-  "version": "0.0.0-alpha.0",
+  "version": "0.0.0-alpha.1",
   "description": "A yeoman generator for warhead",
   "main": "index.js",
   "directories": {
