@@ -12,6 +12,9 @@ module.exports = function (generator) {
   const pkg = {
     name: options.name,
     description: options.description,
+    warhead: {
+      settings: options.settings
+    },
     version: '0.0.0',
     main: `service/index.js`,
     author: {

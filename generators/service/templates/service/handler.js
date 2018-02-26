@@ -1,8 +1,6 @@
-module.exports = function (event) {
-  // You can access the context object like this:
-  // const context = this
-  // console.log(context.functionName)
+const { Response } = require('warhead-<%= platform %>')
 
+module.exports = function (event) {
   // Checkout the docs for Response
-  return event.body
+  return Promise.resolve(new Response(event.body))
 }

@@ -3,10 +3,19 @@ const path = require('path')
 const helpers = require('yeoman-test')
 const assert = require('yeoman-assert')
 const cp = require('child_process')
+const projectName = 'my-project'
 const projectPrompts = {
-  name: 'my-project',
+  name: projectName,
   description: 'This is my awesome project!',
   platform: 'lambda'
+}
+const platformDefaults = {
+  Handler: 'index.handler',
+  MemorySize: 128,
+  Publish: true,
+  Role: 'arn:aws:some-role',
+  Runtime: 'nodejs6.10',
+  Timeout: 3
 }
 
 // Start a process and wait either for it to exit
@@ -50,18 +59,18 @@ describe('warhead-generator', function () {
 
   beforeEach(() => helpers.run(path.join(__dirname, '..', 'generators', 'project'))
     .inTmpDir(dir => (appDir = dir))
-    .withPrompts(projectPrompts)
+    .withPrompts(Object.assign({}, projectPrompts, platformDefaults))
   )
 
   it('warhead:project', () => {
-    console.log(appDir)
     assert.jsonFileContent(
-      path.join(appDir, 'package.json'),
+      path.join(appDir, projectName, 'package.json'),
       {
         name: projectPrompts.name,
         description: projectPrompts.description,
         warhead: {
-          platform: projectPrompts.platform
+          platform: projectPrompts.platform,
+          defaults: platformDefaults
         }
       }
     )
@@ -74,15 +83,20 @@ describe('warhead-generator', function () {
     }
     return helpers.run(path.join(__dirname, '..', 'generators', 'service'))
       .inTmpDir(function () {
-        process.chdir(appDir)
+        process.chdir(path.join(appDir, projectName))
+        appDir = path.join(appDir, projectName)
       })
-      .withPrompts(servicePrompts)
+      .withPrompts(Object.assign({}, servicePrompts, platformDefaults))
       .then(() => {
-        const pkgPath = path.join(appDir, 'services', 'my-service', 'package.json')
+        const pkgPath = path.join(appDir, 'services', 'my-service', 'service', 'package.json')
         const pkg = require(pkgPath)
         assert.jsonFileContent(
           pkgPath,
-          servicePrompts
+          Object.assign({
+            warhead: {
+              settings: platformDefaults
+            }
+          }, servicePrompts)
         )
         assert.ok(pkg.dependencies['warhead-lambda'])
         return runTest('1 passed')

@@ -2,6 +2,8 @@ const Generator = require('yeoman-generator')
 const { kebabCase } = require('lodash')
 const mkdirp = require('mkdirp')
 const npm = require('enpeem')
+const pkg = require('./configs/package.json')
+const options = require('../../options')
 
 module.exports = class ProjectGenerator extends Generator {
   constructor (args, opts) {
@@ -16,7 +18,8 @@ module.exports = class ProjectGenerator extends Generator {
       'lodash',
       'nyc',
       'sinon',
-      'standard'
+      'standard',
+      'warhead-lambda@0.0.0-alpha.0'
     ]
   }
   prompting () {
@@ -64,7 +67,11 @@ module.exports = class ProjectGenerator extends Generator {
     }]
 
     return this.prompt(prompts).then(prompts => {
-      this.prompts = prompts
+      this.options = prompts
+      return this.prompt(options[prompts.platform]())
+    }).then(prompts => {
+      this.platformDefaults = prompts
+      this.pkg = pkg(this)
     })
   }
 
@@ -72,23 +79,22 @@ module.exports = class ProjectGenerator extends Generator {
     // This hack is necessary because NPM does not publish `.gitignore` files
     this.fs.copy(
       this.templatePath('_gitignore'),
-      this.destinationPath('', '.gitignore')
+      this.destinationPath(this.options.name, '.gitignore')
     )
-    this.fs.copyTpl(
-      this.templatePath('package.json'),
-      this.destinationPath('', 'package.json'),
-      this.prompts
+    this.fs.writeJSON(
+      this.destinationPath(this.options.name, 'package.json'),
+      this.pkg
     )
-    mkdirp(this.destinationPath('', 'services/'))
+    mkdirp(this.destinationPath(this.options.name, 'services'))
   }
 
   install () {
     return new Promise((resolve, reject) => {
       npm.install({
-        dir: this.destinationPath(''),
+        dir: this.destinationPath(this.options.name),
         dependencies: this.devDependencies,
         saveDev: true,
-        logLevel: 'silent'
+        production: false
       }, function (err, res) {
         if (err) {
           return reject(err)
