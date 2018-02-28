@@ -25,6 +25,10 @@ const MESSAGES = {
   timeout: {
     service: 'Enter a timeout for this service',
     project: 'Enter a default timeout for services in this project'
+  },
+  region: {
+    service: 'Choose a region to deploy this service to',
+    project: 'Choose a default region to deploy services in this project to'
   }
 }
 
@@ -34,9 +38,35 @@ module.exports = function ({
   Publish = true,
   Role = undefined,
   Runtime = 'nodejs6.10',
-  Timeout = 3
+  Timeout = 3,
+  region = 'us-east-1'
 } = {}, type = 'project') {
   return [
+    {
+      type: 'list',
+      name: 'region',
+      message: MESSAGES.region[type],
+      default: Runtime,
+      choices: [
+        'us-east-1',
+        'us-east-2',
+        'us-west-1',
+        'us-west-2',
+        'ap-northeast-1',
+        'ap-northeast-2',
+        'ap-south-1',
+        'ap-southeast-1',
+        'ap-southeast-2',
+        'ca-central-1',
+        'cn-north-1',
+        'eu-central-1',
+        'eu-west-1',
+        'eu-west-2',
+        'eu-west-3',
+        'sa-east-1',
+        'us-gov-west-1'
+      ]
+    },
     {
       name: 'Handler',
       message: MESSAGES.handler[type],

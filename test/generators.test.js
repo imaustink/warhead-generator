@@ -15,7 +15,8 @@ const platformDefaults = {
   Publish: true,
   Role: 'arn:aws:some-role',
   Runtime: 'nodejs6.10',
-  Timeout: 3
+  Timeout: 3,
+  region: 'us-east-1'
 }
 
 // Start a process and wait either for it to exit
