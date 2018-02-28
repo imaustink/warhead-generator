@@ -46,7 +46,7 @@ module.exports = function ({
       type: 'list',
       name: 'region',
       message: MESSAGES.region[type],
-      default: Runtime,
+      default: region,
       choices: [
         'us-east-1',
         'us-east-2',
