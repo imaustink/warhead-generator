@@ -1,14 +1,5 @@
 module.exports = function (generator) {
-  const { options } = generator
-  const adapters = {
-    lambda: {
-      name: 'warhead-lambda',
-      version: '0.0.0-alpha.0'
-    }
-  }
-  const dependencies = {
-    [adapters[options.platform].name]: adapters[options.platform].version
-  }
+  const options = generator.options
   const pkg = {
     name: options.name,
     description: options.description,
@@ -26,7 +17,7 @@ module.exports = function (generator) {
       test: 'test/'
     },
     devDependencies: {},
-    dependencies
+    dependencies: {}
   }
 
   return pkg

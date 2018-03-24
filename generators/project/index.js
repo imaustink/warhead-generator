@@ -19,7 +19,8 @@ module.exports = class ProjectGenerator extends Generator {
       'nyc',
       'sinon',
       'standard',
-      'warhead-lambda@0.0.0-alpha.0'
+      'warhead-lambda@latest',
+      'warhead@latest'
     ]
   }
   prompting () {
@@ -76,6 +77,7 @@ module.exports = class ProjectGenerator extends Generator {
   }
 
   writing () {
+    console.log('Writing files...')
     // This hack is necessary because NPM does not publish `.gitignore` files
     this.fs.copy(
       this.templatePath('_gitignore'),
@@ -89,12 +91,14 @@ module.exports = class ProjectGenerator extends Generator {
   }
 
   install () {
+    console.log('Installing dependencies...')
     return new Promise((resolve, reject) => {
       npm.install({
         dir: this.destinationPath(this.options.name),
         dependencies: this.devDependencies,
         saveDev: true,
-        production: false
+        production: false,
+        loglevel: 'silent'
       }, function (err, res) {
         if (err) {
           return reject(err)

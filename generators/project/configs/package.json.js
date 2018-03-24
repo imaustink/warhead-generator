@@ -1,5 +1,6 @@
 module.exports = function (generator) {
-  const { options, platformDefaults } = generator
+  const options = generator.options
+  const platformDefaults = generator.platformDefaults
 
   const pkg = {
     name: options.name,
@@ -10,7 +11,7 @@ module.exports = function (generator) {
       'cover:html': 'nyc report --reporter=html',
       'cover:text': 'nyc report --reporter=text-lcov',
       'test:watch': 'nyc ava **/*.test.js --watch',
-      test: 'standard --fix && npm run ava',
+      test: 'standard --fix && ava',
       linter: 'standard --fix',
       ci: 'npm run test && npm run cover:text | coveralls'
     },
