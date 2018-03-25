@@ -38,7 +38,6 @@ function startAndWait (cmd, args, options) {
       if (status !== 0) {
         return reject(new Error(buffer))
       }
-
       resolve(buffer)
     })
   })
@@ -50,7 +49,7 @@ describe('warhead-generator', function () {
   function runTest (expectedText) {
     return startAndWait('warhead', ['test'], { cwd: appDir })
       .then(function (buffer) {
-        console.log(buffer)
+        console.log(buffer, expectedText)
         assert.ok(buffer.indexOf(expectedText) !== -1,
           'Ran test with text: ' + expectedText)
       })
@@ -101,7 +100,7 @@ describe('warhead-generator', function () {
           }, servicePrompts)
         )
         assert.ok(pkg.dependencies['warhead-lambda'])
-        return runTest('1 passed')
+        return runTest('passed')
       })
   })
 })

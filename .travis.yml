@@ -1,5 +1,5 @@
 language: node_js
 node_js:
-  - "4.3.2"
+  # This blows up because yoemen-test uses ES6 features "4.3.2"
   - "6.10.3"
   # This blows up the linter in CI :( - "lts/*"
