@@ -114,6 +114,7 @@ module.exports = function ({
       message: MESSAGES.runtime[type],
       default: Runtime,
       choices: [
+        'nodejs8.10',
         'nodejs6.10',
         'nodejs4.3',
         'nodejs4.3-edge',
