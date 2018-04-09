@@ -4,6 +4,9 @@ const path = require('path')
 const npm = require('enpeem')
 const pkg = require('./configs/package.json')
 const options = require('../../options')
+const adapters = {
+  lambda: 'warhead-lambda'
+}
 
 module.exports = class ServiceGenerator extends Generator {
   constructor (args, opts) {
@@ -11,7 +14,7 @@ module.exports = class ServiceGenerator extends Generator {
     const pkg = require(path.join(process.cwd(), 'package.json'))
     this.options = pkg.warhead
     this.dependencies = [
-      'warhead-lambda@0.0.0-alpha.1'
+      `${adapters[this.options.platform]}@latest`
     ]
   }
   prompting () {
@@ -40,6 +43,7 @@ module.exports = class ServiceGenerator extends Generator {
   }
 
   writing () {
+    console.log('Writing files...')
     this.fs.writeJSON(
       this.destinationPath('services', this.options.name, 'service', 'package.json'),
       this.pkg
@@ -62,12 +66,14 @@ module.exports = class ServiceGenerator extends Generator {
   }
 
   install () {
+    console.log('Installing dependencies...')
     return new Promise((resolve, reject) => {
       npm.install({
         dir: this.destinationPath('services', this.options.name, 'service'),
         dependencies: this.dependencies,
         save: true,
-        production: true
+        production: true,
+        loglevel: 'silent'
       }, function (err, res) {
         if (err) {
           return reject(err)
